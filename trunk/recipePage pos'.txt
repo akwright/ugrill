@@ -1,0 +1,14 @@
+mc_recipePage  x=59.6  y=59.0
+	
+  mc_searchArea  x=20.9  y=18.4
+  btn_addIcon  x=205.1  y=27.9
+  mc_ingredientDisplay  x=21.3  y=109.7
+  mc_guestDisplay  x=21.3  y=395.8
+  btn_guestIncrease  x=140.0  y=392.4
+  btn_guestDecrease  x=140.0  y=442.6
+  btn_ingredientSearch  x=21.3  y=563.1
+
+  mc_recipeDisplay  x=542.0  y=28.7
+  btn_recipeGrill  x=639.0  y=496.9
+  btn_recipeBack  x=672.0  y=579.6
+  btn_recipeNext  x=1003.7  y=579.6
