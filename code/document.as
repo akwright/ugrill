@@ -34,6 +34,7 @@
 		var recipeGrill = new btn_recipeGrill();
 		var recipeBack = new btn_recipeBack();
 		var recipeNext = new btn_recipeNext();
+		var closeMe = new btn_closeBorder();
 		
 		public function document() {
 					
@@ -42,7 +43,20 @@
 			
 			mc_mainScreen.mc_slideArea.mc_sliderButton.addEventListener(MouseEvent.MOUSE_DOWN, sliderDrag);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stage.addEventListener(MouseEvent.MOUSE_UP, sliderDrop);
-			
+		
+		}
+		
+		var sliderBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
+		
+		function sliderDrag(event:MouseEvent):void {
+			mc_mainScreen.mc_slideArea.mc_sliderButton.startDrag(false, sliderBind);
+		}
+		
+		function sliderDrop(event:MouseEvent):void {
+			mc_mainScreen.mc_slideArea.mc_sliderButton.stopDrag();
+		}
+		
+		function recipeButton(event:MouseEvent):void {
 			mc_mainScreen.addChild(modal);
 			modal.alpha = 0;
 			modal.mouseEnabled = false;
@@ -58,31 +72,15 @@
 				ingredientOutline.addChild(guestIncrease);
 				ingredientOutline.addChild(guestDecrease);
 				ingredientOutline.addChild(ingredientSearch);
-				recipePage.addChild(recipeDisplay);
+			recipePage.addChild(recipeDisplay);
 					recipeDisplay.addChild(recipeGrill);
 					recipeDisplay.addChild(recipeBack);
 					recipeDisplay.addChild(recipeNext);
-				recipeDisplay.alpha = 0;
+					recipeDisplay.alpha = 0;
+			recipeDisplay.x = -5000;
+			recipePage.addChild(closeMe);
 			
-			mc_mainScreen.addChild(musicPage);
-			musicPage.alpha = 0;
-		
-		}
-		
-		var sliderBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
-		
-		function sliderDrag(event:MouseEvent):void {
-			mc_mainScreen.mc_slideArea.mc_sliderButton.startDrag(false, sliderBind);
-		}
-		
-		function sliderDrop(event:MouseEvent):void {
-			mc_mainScreen.mc_slideArea.mc_sliderButton.stopDrag();
-		}
-		
-		function recipeButton(event:MouseEvent):void {
-			resetScene();
 			modal.alpha = .6;
-			musicPage.alpha = 0;
 			recipePage.x = 59.6;
 			recipePage.y = 59.0;
 												  
@@ -117,9 +115,27 @@
 			ingredientSearch.addEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			
 			searchArea.addChild(ingredients);
+			
+			closeMe.x = 1178.4;
+			closeMe.y = -4;
+			closeMe.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
+		}
+		
+		function closeOverlays(event:MouseEvent):void {
+			if(recipePage.alpha == 1) {
+				mc_mainScreen.removeChild(recipePage);
+				mc_mainScreen.removeChild(modal);
+				mc_mainScreen.recipePage.removeChild(recipeDisplay);
+			}
+			else if(musicPage.alpha == 1) {
+				mc_mainScreen.removeChild(musicPage);
+				mc_mainScreen.removeChild(modal);
+			}
 		}
 		
 		function showRecipes(event:MouseEvent):void {
+			
+				
 			if(ingredientOutline.x == 400) {
 				var ingredientStuff:Tween = new Tween(ingredientOutline, "x", Strong.easeIn, 400,0,0.5, true);
 				recipeDisplay.x = 542.0;
@@ -138,7 +154,7 @@
 			
 		}
 		
-		function textFocus(event:MouseEvent):void {
+		function textFocus(event:FocusEvent):void {
 			event.target.text = "";
 		}
 		
@@ -147,8 +163,7 @@
 		}
 		
 		function musicButton(event:MouseEvent):void {
-			resetScene();
-			recipePage.alpha = 0;
+			mc_mainScreen.removeChild(recipePage);
 			musicPage.x = 59.6;
 			musicPage.y = 59.0;
 			
@@ -156,8 +171,9 @@
 		}
 		
 		function resetScene() {
-			recipeDisplay.alpha = 0;
-			musicPage.alpha = 0;
+			mc_mainScreen.removeChild(recipePage);
+			mc_mainScreen.removeChild(musicPage);
+			mc_mainScreen.removeChild(modal);
 		}		
 		
 	}	
