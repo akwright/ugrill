@@ -57,10 +57,11 @@
 		}
 		
 		function recipeButton(event:MouseEvent):void {
-			mc_mainScreen.addChild(modal);
-			modal.alpha = 0;
-			modal.mouseEnabled = false;
-			modal.mouseChildren = false;
+			if( musicPage.parent == mc_mainScreen ) {
+				musicPage.x = 50000;
+			}
+			
+			showModal();
 			
 			mc_mainScreen.addChild(recipePage);
 			recipePage.alpha = 0;
@@ -72,15 +73,9 @@
 				ingredientOutline.addChild(guestIncrease);
 				ingredientOutline.addChild(guestDecrease);
 				ingredientOutline.addChild(ingredientSearch);
-			recipePage.addChild(recipeDisplay);
-					recipeDisplay.addChild(recipeGrill);
-					recipeDisplay.addChild(recipeBack);
-					recipeDisplay.addChild(recipeNext);
-					recipeDisplay.alpha = 0;
-			recipeDisplay.x = -5000;
+			
 			recipePage.addChild(closeMe);
 			
-			modal.alpha = .6;
 			recipePage.x = 59.6;
 			recipePage.y = 59.0;
 												  
@@ -122,20 +117,50 @@
 		}
 		
 		function closeOverlays(event:MouseEvent):void {
-			if(recipePage.alpha == 1) {
-				mc_mainScreen.removeChild(recipePage);
-				mc_mainScreen.removeChild(modal);
-				mc_mainScreen.recipePage.removeChild(recipeDisplay);
+			// If recipePage exists, move it off screen.
+			if( recipePage.parent == mc_mainScreen ) {
+				recipePage.x = 50000;
+				modal.x = 50000;
+				// If recipeDisplay exists, move it off screen.
+				if( recipeDisplay.parent == recipePage ) {
+					recipeDisplay.x = 50000;
+				}
+				
 			}
-			else if(musicPage.alpha == 1) {
-				mc_mainScreen.removeChild(musicPage);
-				mc_mainScreen.removeChild(modal);
+			// If musicPage exists, move it off screen.
+			else if( musicPage.parent == mc_mainScreen ) {
+				musicPage.x = 50000;
+				modal.x = 50000;
 			}
 		}
 		
+		function showModal() {
+			if( modal.parent == mc_mainScreen ) {
+				modal.x = -50;
+				modal.y = -50;
+			}
+			else {
+				mc_mainScreen.addChild(modal);
+			}
+			modal.alpha = .6;
+			modal.x = -50;
+			modal.y = -50;
+			modal.mouseChildren = false;
+		}
+		
 		function showRecipes(event:MouseEvent):void {
+			if( !recipeDisplay.exists ) {
+				recipePage.addChild(recipeDisplay);
+						recipeDisplay.addChild(recipeGrill);
+						recipeDisplay.addChild(recipeBack);
+						recipeDisplay.addChild(recipeNext);
+				recipeDisplay.x = 50000;
+			}
+			slideRecipe();
 			
-				
+		}
+		
+		function slideRecipe() {
 			if(ingredientOutline.x == 400) {
 				var ingredientStuff:Tween = new Tween(ingredientOutline, "x", Strong.easeIn, 400,0,0.5, true);
 				recipeDisplay.x = 542.0;
@@ -151,7 +176,6 @@
 			else {
 				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
-			
 		}
 		
 		function textFocus(event:FocusEvent):void {
@@ -163,18 +187,22 @@
 		}
 		
 		function musicButton(event:MouseEvent):void {
-			mc_mainScreen.removeChild(recipePage);
+			if( recipePage.parent == mc_mainScreen ) {
+				recipePage.x = 50000;
+			}
+			showModal();
+		
+			mc_mainScreen.addChild(musicPage);
 			musicPage.x = 59.6;
 			musicPage.y = 59.0;
 			
+			musicPage.addChild(closeMe);
+			closeMe.x = 1178.4;
+			closeMe.y = -4;
+			closeMe.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
+			
 			var musicScreenStart:Tween = new Tween(musicPage, "alpha", Strong.easeIn, 0,1,1, true);
 		}
-		
-		function resetScene() {
-			mc_mainScreen.removeChild(recipePage);
-			mc_mainScreen.removeChild(musicPage);
-			mc_mainScreen.removeChild(modal);
-		}		
 		
 	}	
 	
