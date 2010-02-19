@@ -38,6 +38,7 @@
 		var ingredientList:TextField = new TextField();
 		var ingredients:TextField = new TextField();
 		var ingredientsArray:Array = new Array();
+		var startSlider;
 		
 		public function document() {
 					
@@ -46,17 +47,40 @@
 			
 			mc_mainScreen.mc_slideArea.mc_sliderButton.addEventListener(MouseEvent.MOUSE_DOWN, sliderDrag);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stage.addEventListener(MouseEvent.MOUSE_UP, sliderDrop);
-		
 		}
 		
 		var sliderBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
 		
 		function sliderDrag(event:MouseEvent):void {
+			startSlider = mc_mainScreen.mc_slideArea.mc_sliderButton.y;
 			mc_mainScreen.mc_slideArea.mc_sliderButton.startDrag(false, sliderBind);
 		}
 		
 		function sliderDrop(event:MouseEvent):void {
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stopDrag();
+			//trace(mc_mainScreen.mc_slideArea.mc_sliderButton.y);
+			if(mc_mainScreen.mc_slideArea.mc_sliderButton.y <= 95) {
+				snapUp();
+			}
+			else if(mc_mainScreen.mc_slideArea.mc_sliderButton.y > 95) {
+				snapDown();
+			}
+			else {
+				if(startSlider > 95) {
+					snapDown();
+				}
+				else {
+					snapUp();
+				}
+			}
+		}
+		
+		function snapDown() {
+			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,167,0.1, true);
+		}
+		
+		function snapUp() {
+			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,22,0.1, true);
 		}
 		
 		function recipeButton(event:MouseEvent):void {
