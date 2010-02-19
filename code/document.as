@@ -165,6 +165,7 @@
 			}
 			// If musicPage exists, move it off screen.
 			else if( musicPage.parent == mc_mainScreen ) {
+				trace('closed the music page');
 				musicPage.x = 50000;
 				modal.x = 50000;
 			}
@@ -242,9 +243,12 @@
 			if( recipePage.parent == mc_mainScreen ) {
 				recipePage.x = 50000;
 			}
+			
+			else if( musicPage.exists  ) {
+				mc_mainScreen.addChild(musicPage);
+			}
 			showModal();
-		
-			mc_mainScreen.addChild(musicPage);
+			
 			musicPage.alpha = 0;
 			musicPage.x = 59.6;
 			musicPage.y = 59.0;
