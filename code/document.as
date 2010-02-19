@@ -182,6 +182,7 @@
 						recipeDisplay.addChild(recipeBack);
 						recipeDisplay.addChild(recipeNext);
 				recipeDisplay.x = 50000;
+				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
 			slideRecipe();
 			
