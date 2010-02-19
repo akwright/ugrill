@@ -35,6 +35,9 @@
 		var recipeBack = new btn_recipeBack();
 		var recipeNext = new btn_recipeNext();
 		var closeMe = new btn_closeBorder();
+		var ingredientList:TextField = new TextField();
+		var ingredients:TextField = new TextField();
+		var ingredientsArray:Array = new Array();
 		
 		public function document() {
 					
@@ -84,7 +87,6 @@
 			ingredientOutline.y = 0;
 			searchArea.x = 20.9;
 			searchArea.y = 18.4;
-				var ingredients:TextField = new TextField();
 				ingredients.type = TextFieldType.INPUT;
 				ingredients.wordWrap = false;
 				ingredients.width = 140;
@@ -94,10 +96,19 @@
 				ingredients.text="Type ingredients here.";
 				ingredients.addEventListener(FocusEvent.FOCUS_IN, textFocus);
 				ingredients.addEventListener(FocusEvent.FOCUS_OUT, textFocusOut);
+				ingredients.addEventListener(KeyboardEvent.KEY_DOWN, checkEnter);
 			addIcon.x = 205.1;
 			addIcon.y = 27.9;
+				addIcon.addEventListener(MouseEvent.MOUSE_DOWN, addIngredient);
 			ingredientDisplay.x = 21.3;
 			ingredientDisplay.y = 109.7;
+				ingredientList.type = TextFieldType.DYNAMIC;
+				ingredientList.wordWrap = true;
+				ingredientList.width =  346;
+				ingredientList.height = 220;
+				ingredientList.x = 10;
+				ingredientList.y = 15;
+				ingredientList.text="";
 			guestDisplay.x = 21.3;
 			guestDisplay.y = 395.8;
 			guestIncrease.x = 140.0;
@@ -110,6 +121,7 @@
 			ingredientSearch.addEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			
 			searchArea.addChild(ingredients);
+			ingredientDisplay.addChild(ingredientList);
 			
 			closeMe.x = 1178.4;
 			closeMe.y = -4;
@@ -134,6 +146,14 @@
 			}
 		}
 		
+		// Add ingredient from search field to list
+		function addIngredient(event:MouseEvent):void {
+			ingredientList.appendText("- " +ingredients.text +"\n");
+			ingredientsArray.push(ingredients.text);
+			trace(ingredientsArray[ingredientsArray.length-1]);
+			ingredients.text = "";
+		}
+		
 		function showModal() {
 			if( modal.parent == mc_mainScreen ) {
 				modal.x = -50;
@@ -146,6 +166,13 @@
 			modal.x = -50;
 			modal.y = -50;
 			modal.mouseChildren = false;
+		}
+		
+		// Enter key functionality
+		function checkEnter(event:KeyboardEvent):void {
+			if(event.keyCode == 13) {
+				addIngredient(null);
+			}
 		}
 		
 		function showRecipes(event:MouseEvent):void {
@@ -179,11 +206,11 @@
 		}
 		
 		function textFocus(event:FocusEvent):void {
-			event.target.text = "";
+			ingredients.text = "";
 		}
 		
 		function textFocusOut(event:FocusEvent):void {
-			event.target.text = "Type ingredients here.";
+			//event.target.text = "Type ingredients here.";
 		}
 		
 		function musicButton(event:MouseEvent):void {
