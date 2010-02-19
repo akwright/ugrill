@@ -220,15 +220,15 @@
 			showModal();
 		
 			mc_mainScreen.addChild(musicPage);
+			musicPage.alpha = 0;
 			musicPage.x = 59.6;
 			musicPage.y = 59.0;
+			var musicScreenStart:Tween = new Tween(musicPage, "alpha", Strong.easeIn, 0,1,1, true);
 			
 			musicPage.addChild(closeMe);
 			closeMe.x = 1178.4;
 			closeMe.y = -4;
 			closeMe.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
-			
-			var musicScreenStart:Tween = new Tween(musicPage, "alpha", Strong.easeIn, 0,1,1, true);
 		}
 		
 	}	
