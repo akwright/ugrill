@@ -37,10 +37,39 @@
 		var closeMe = new btn_closeBorder();
 		var ingredientList:TextField = new TextField();
 		var ingredients:TextField = new TextField();
+		var ingredientLabel:TextField = new TextField();
+		var ingredientTitle:TextField = new TextField();
+		var manualLabel:TextField = new TextField();
+		var autoLabel:TextField = new TextField();
 		var ingredientsArray:Array = new Array();
 		var startSlider;
+		var myFormat = new TextFormat();
+		var switchFormat = new TextFormat();
 		
 		public function document() {
+			myFormat.font = "Myriad Pro";
+			myFormat.color = "0xFFFFFF";
+			myFormat.size = 22;
+			switchFormat.font = "Myriad Pro";
+			switchFormat.color = "0x000000";
+			switchFormat.size = 18;
+			
+			autoLabel.type = TextFieldType.DYNAMIC;
+				autoLabel.text = "Auto";
+				autoLabel.x = 1330;
+				autoLabel.y = 10;
+				autoLabel.width = 400;
+				autoLabel.setTextFormat(switchFormat);
+			manualLabel.type = TextFieldType.DYNAMIC;
+				manualLabel.text = "Manual";
+				manualLabel.x = 1330;
+				manualLabel.y = 160;
+				manualLabel.width = 400;
+				manualLabel.setTextFormat(switchFormat);
+			
+			mc_mainScreen.addChild(manualLabel);
+			mc_mainScreen.addChild(autoLabel);
+			
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stop();
 			mc_mainScreen.btn_navButton1.addEventListener(MouseEvent.CLICK, recipeButton);
 			mc_mainScreen.btn_navButton2.addEventListener(MouseEvent.CLICK, musicButton);
@@ -102,6 +131,8 @@
 				ingredientOutline.addChild(guestIncrease);
 				ingredientOutline.addChild(guestDecrease);
 				ingredientOutline.addChild(ingredientSearch);
+				ingredientOutline.addChild(ingredientLabel);
+				ingredientOutline.addChild(ingredientTitle);
 			
 			recipePage.addChild(closeMe);
 			
@@ -126,6 +157,18 @@
 			addIcon.x = 205.1;
 			addIcon.y = 27.9;
 				addIcon.addEventListener(MouseEvent.MOUSE_DOWN, addIngredient);
+				ingredientLabel.type = TextFieldType.DYNAMIC;
+				ingredientLabel.text = "Number of Guests:";
+				ingredientLabel.y = 360;
+				ingredientLabel.x = 20;
+				ingredientLabel.width = 400;
+				ingredientLabel.setTextFormat(myFormat);
+				ingredientTitle.type = TextFieldType.DYNAMIC;
+				ingredientTitle.text = "Ingredients:";
+				ingredientTitle.y = 80;
+				ingredientTitle.x = 20;
+				ingredientTitle.width = 400;
+				ingredientTitle.setTextFormat(myFormat);
 			ingredientDisplay.x = 21.3;
 			ingredientDisplay.y = 109.7;
 				ingredientList.type = TextFieldType.DYNAMIC;
