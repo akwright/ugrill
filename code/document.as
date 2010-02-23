@@ -46,6 +46,9 @@
 		var myFormat = new TextFormat();
 		var switchFormat = new TextFormat();
 		
+		var flame = new mc_grillFlame();
+		var flameBorder = new mc_grillFlameBorder();
+		
 		public function document() {
 			myFormat.font = "Myriad Pro";
 			myFormat.color = "0xFFFFFF";
@@ -107,11 +110,13 @@
 		function snapDown() {
 			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(5);
 			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,167,0.1, true);
+			mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(2);
 		}
 		
 		function snapUp() {
 			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
 			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,22,0.1, true);
+			mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
 		}
 		
 		function recipeButton(event:MouseEvent):void {
@@ -252,11 +257,24 @@
 						recipeDisplay.addChild(recipeBack);
 						recipeDisplay.addChild(recipeNext);
 				recipeDisplay.x = 50000;
-				recipeGrill
+				
+				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, startGrilling);
+				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
 				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
 			slideRecipe();
 			
+		}
+		
+		function startGrilling(event:MouseEvent):void {
+			
+			mc_mainScreen.addChild(flame);
+			mc_mainScreen.addChild(flameBorder);
+			
+			flame.x = 1000;
+			flame.y = 76;
+			flameBorder.x = 1000;
+			flameBorder.y = 96;
 		}
 		
 		function slideRecipe() {
