@@ -92,6 +92,8 @@
 			
 			mc_mainScreen.mc_slideArea.mc_sliderButton.addEventListener(MouseEvent.MOUSE_DOWN, sliderDrag);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stage.addEventListener(MouseEvent.MOUSE_UP, sliderDrop);
+			mc_mainScreen.mc_slideArea.mc_sliderButton.useHandCursor;
+			mc_mainScreen.mc_slideArea.mc_sliderButton.buttonMode = true;
 		}
 		
 		var sliderBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
@@ -293,14 +295,27 @@
 		}
 		
 		function startGrilling(event:MouseEvent):void {
-			
+			recipeGrill.removeEventListener(MouseEvent.MOUSE_UP, startGrilling);
 			mc_mainScreen.addChild(flame);
 			mc_mainScreen.addChild(flameBorder);
 			
-			flame.x = 1000;
+			flame.x = 1002;
 			flame.y = 76;
 			flameBorder.x = 1000;
-			flameBorder.y = 96;
+			flameBorder.y = 105;
+			
+			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
+			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
+		}
+		
+		var flameBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
+		
+		function flameDrag(event:MouseEvent):void {
+			flame.startDrag(false, flameBind);
+		}
+		
+		function flameDrop(event:MouseEvent):void {
+			flame.stopDrag();
 		}
 		
 		function slideRecipe() {
