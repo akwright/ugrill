@@ -45,11 +45,15 @@
 		var startSlider;
 		var myFormat = new TextFormat();
 		var switchFormat = new TextFormat();
+		var timeline = new mc_timeline();
+		var timelineScroller = new mc_timelineScroller();
+		var currentState:int = new int(); // 1 = auto, 0 = manual
 		
 		var flame = new mc_grillFlame();
 		var flameBorder = new mc_grillFlameBorder();
 		
 		public function document() {
+			currentState = 1; // auto
 			myFormat.font = "Myriad Pro";
 			myFormat.color = "0xFFFFFF";
 			myFormat.size = 22;
@@ -72,6 +76,15 @@
 			
 			mc_mainScreen.addChild(manualLabel);
 			mc_mainScreen.addChild(autoLabel);
+			
+			timeline.x = 17.3;
+			timeline.y = 723.3;
+			timeline.width = 1080;
+			timelineScroller.x = 21.5;
+			timelineScroller.y = 723.3;
+			
+			mc_mainScreen.addChild(timeline);
+			mc_mainScreen.addChild(timelineScroller);
 			
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stop();
 			mc_mainScreen.btn_navButton1.addEventListener(MouseEvent.CLICK, recipeButton);
@@ -111,12 +124,24 @@
 			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(5);
 			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,167,0.1, true);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(2);
+			trace(mc_mainScreen.mc_slideArea.mc_sliderButton.y);
+			if(currentState == 1) {
+				var timelineDown:Tween = new Tween(timeline, "alpha", Strong.easeIn, 1,0,.3, true);
+				var timelineDown2:Tween = new Tween(timelineScroller, "alpha", Strong.easeIn, 1,0,.3, true);
+			}
+			currentState = 0;
 		}
 		
 		function snapUp() {
 			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
 			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,22,0.1, true);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
+			trace(mc_mainScreen.mc_slideArea.mc_sliderButton.y);
+			if(currentState == 0) {
+				var timelineUp:Tween = new Tween(timeline, "alpha", Strong.easeIn, 0,1,.3, true);
+				var timelineUp2:Tween = new Tween(timelineScroller, "alpha", Strong.easeIn, 0,1,.3, true);
+			}
+			currentState = 1;
 		}
 		
 		function recipeButton(event:MouseEvent):void {
@@ -167,6 +192,7 @@
 				ingredientLabel.y = 360;
 				ingredientLabel.x = 20;
 				ingredientLabel.width = 400;
+				ingredientLabel.height = 30;
 				ingredientLabel.setTextFormat(myFormat);
 				ingredientTitle.type = TextFieldType.DYNAMIC;
 				ingredientTitle.text = "Ingredients:";
