@@ -41,7 +41,7 @@
 		var startSlider;
 		
 		public function document() {
-					
+			mc_mainScreen.mc_slideArea.mc_sliderButton.stop();
 			mc_mainScreen.btn_navButton1.addEventListener(MouseEvent.CLICK, recipeButton);
 			mc_mainScreen.btn_navButton2.addEventListener(MouseEvent.CLICK, musicButton);
 			
@@ -76,10 +76,12 @@
 		}
 		
 		function snapDown() {
+			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(5);
 			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,167,0.1, true);
 		}
 		
 		function snapUp() {
+			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
 			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,22,0.1, true);
 		}
 		
