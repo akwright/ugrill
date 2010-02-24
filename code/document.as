@@ -132,8 +132,6 @@
 		}
 		
 		public function document() {
-			xmlLoader.addEventListener(Event.COMPLETE, showXML);
-			xmlLoader.load(new URLRequest("../code/recipes.xml"));
 			
 			currentState = 1; // auto
 			myTimer.addEventListener("timer", timelineTimer);
@@ -154,7 +152,6 @@
 				recipeFormat.color = "0x000000";
 				recipeFormat.bold = true;
 				recipeFormat.size = 18;
-
 			autoLabel.type = TextFieldType.DYNAMIC;
 				autoLabel.text = "Auto";
 				autoLabel.x = 1330;
