@@ -75,6 +75,7 @@
 		var alertBox = new mc_alertBox();
 		var closeAlert = new btn_closeMe();
 		var chicken = new mc_chicken();
+		var burgers = new mc_burgers();
 		
 		// Tween declarations to avoid Garbage collecting
 		var recipeScreenStart:Tween;
@@ -140,7 +141,50 @@
 		}
 		
 		public function document() {
+			mc_mainScreen.addChild(flameBorder);
+			mc_mainScreen.addChild(flame);
+			flameBorder.mouseEnabled = false;
+			flameBorder.mouseChildren = false;
+			flame.buttonMode = true;
 			
+<<<<<<< .mine
+			var dragMask:Sprite = new Sprite();
+			dragMask.graphics.beginFill(0xFFFFFF);
+			dragMask.graphics.drawRect(1000, 73, 52, 230);
+			
+			mc_mainScreen.addChild(dragMask);
+			
+			dragMask.alpha = 0;
+			dragMask.mouseEnabled = false;
+			
+			flame.mask = dragMask;
+			
+			flame.x = 1002;
+			flame.y = 75;
+			flame.width = 50;
+			flameBorder.x = 1000;
+			flameBorder.y = 105;
+			flameBorder.width = 51;
+			
+			
+			barLine.graphics.beginFill(0xFFFFFF);
+			barLine.graphics.drawRect(10, 50, 90, 1);
+			flame.addChild(barLine);
+			
+			flameBorder.addChild(tempDisplay);
+			
+			tempDisplay.type = TextFieldType.DYNAMIC;
+				tempDisplay.text = "°";
+				tempDisplay.x = 3;
+				tempDisplay.y = -30;
+				tempDisplay.width = 60;
+				tempDisplay.height = 30;
+				tempDisplay.setTextFormat(tempFormat);
+				
+			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
+			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
+			
+=======
 			mc_mainScreen.addChild(flameBorder);
 			mc_mainScreen.addChild(flame);
 			flameBorder.mouseEnabled = false;
@@ -183,6 +227,7 @@
 			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
 			mc_mainScreen.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
 			
+>>>>>>> .r26
 			currentState = 1; // auto
 			myTimer.addEventListener("timer", timelineTimer);
 			
@@ -525,10 +570,21 @@
 					chicken.y = 100.8;
 				}
 				else if( recipeIndex == 1 ) {
-					
+					mc_mainScreen.addChild(burgers);
+					burgers.x = 620.4;
+					burgers.y = 30.7;
 				}
 			}
-			
+			else if( burgers == 1 && fajitas == 0 ) {
+				mc_mainScreen.addChild(burgers);
+				burgers.x = 620.4;
+				burgers.y = 30.7;
+			}
+			else if( burgers == 0 && fajitas == 1 ) {
+				mc_mainScreen.addChild(chicken);
+				chicken.x = 625.5;
+				chicken.y = 100.8;
+			}
 			myTimer.start();
 			//var timelineTween:Tween = new Tween(timelineScroller, "x", null, timelineScroller.x,1000,400, true);
 		}
@@ -717,6 +773,7 @@
 					myTimer.stop();
 					timelineScroller.x = 21.5;
 					chicken.x = 50000;
+					burgers.x = 50000;
 				}
 			}
 		}
@@ -729,9 +786,15 @@
 		var flameBind:Rectangle = new Rectangle(1002, 75, 0, 165);  
 		
 		function flameDrag(event:MouseEvent):void {
+<<<<<<< .mine
+			if( currentState != 1 ) {
+				flame.startDrag(false, flameBind);
+			}
+=======
 			if(currentState != 1) {
 				flame.startDrag(false, flameBind);
 			}
+>>>>>>> .r26
 		}
 		
 		function flameDrop(event:MouseEvent):void {
