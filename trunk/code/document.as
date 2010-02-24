@@ -51,29 +51,22 @@
 		var guestCount:TextField = new TextField();
 		var manualLabel:TextField = new TextField();
 		var autoLabel:TextField = new TextField();
-<<<<<<< .mine
 		var tempDisplay:TextField = new TextField();
-=======
 		var recipeWords:TextField = new TextField();
 		var recipeLabels:TextField = new TextField();
->>>>>>> .r20
 		var ingredientsArray:Array = new Array();
 		var startSlider;
 		var myFormat = new TextFormat();
 		var switchFormat = new TextFormat();
 		var guestFormat = new TextFormat();
-<<<<<<< .mine
 		var tempFormat = new TextFormat();
-=======
 		var recipeFormat = new TextFormat();
->>>>>>> .r20
 		var guestCounter:int = 1;
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
 		var currentState:int = new int(); // 1 = auto, 0 = manual
 		var numberOfButtons:int = 1;
 		var buttons:Array = new Array();
-		var deleteIcon = new btn_deleteIcon();
 		var i:int = 0;
 		var recipeArray:Array = new Array();
 		var recipeIndex:Number = 0;
@@ -154,17 +147,14 @@
 			guestFormat.font = "Myriad Pro";
 				guestFormat.color = "0x000000";
 				guestFormat.size = 60;
-<<<<<<< .mine
 			tempFormat.font = "Myriad Pro";
 				tempFormat.color = "0xFF0000";
 				tempFormat.size = 24;
-=======
 			recipeFormat.font = "Myriad Pro";
 				recipeFormat.color = "0x000000";
 				recipeFormat.bold = true;
 				recipeFormat.size = 18;
->>>>>>> .r20
-			
+
 			autoLabel.type = TextFieldType.DYNAMIC;
 				autoLabel.text = "Auto";
 				autoLabel.x = 1330;
@@ -408,10 +398,7 @@
 			*/
 			
 				ingredientList.setTextFormat(switchFormat);
-<<<<<<< .mine
-=======
 				//trace(ingredientsArray[ingredientsArray.length-1]);
->>>>>>> .r20
 				ingredients.text = "";
 			}
 		}
@@ -454,20 +441,22 @@
 			fajitas = 0;
 			burgers = 0;
 			
-			for(var i:Number = 0; i <= ingredientsArray.length; i++) {
-				
-				if(ingredientsArray[i] == "cheese" || ingredientsArray[i] == "chicken" || ingredientsArray[i] == "salsa" || ingredientsArray[i] == "tortillas" && fajitas == 0) {
-					//                    title   prep    cook      desc                        pic          ing     ing    ing   ing
-					recipeResults.push("Fajitas\n10 min.\n20 min.\nA Mexican dish that is awesome\nChicken\nCheese\nSalsa\nTortillas");
-					fajitas = 1;
+			if(ingredientsArray.length > 0)
+			{
+				for(var i:Number = 0; i <= ingredientsArray.length; i++) {
+					
+					if(String(ingredientsArray[i]).toLowerCase() == "cheese" || String(ingredientsArray[i]).toLowerCase() == "chicken" || String(ingredientsArray[i]).toLowerCase() == "salsa" || String(ingredientsArray[i]).toLowerCase() == "tortillas" && fajitas == 0) {
+						recipeResults.push("Fajitas\n10 min.\n20 min.\nA Mexican dish that is awesome\nChicken\nCheese\nSalsa\nTortillas");
+						fajitas = 1;
+					}
+					
+					if(String(ingredientsArray[i]).toLowerCase() == "beef" || String(ingredientsArray[i]).toLowerCase() == "cheese" || String(ingredientsArray[i]).toLowerCase() == "buns" || String(ingredientsArray[i]).toLowerCase() == "onions" && burgers == 0) {
+						recipeResults.push("Burgers\n10 min.\n25 min.\nAn All-American classic!\nGround beef\nCheese\nBurger buns\nOnions");
+						burgers = 1;
+					}
 				}
-				
-				if(ingredientsArray[i] == "beef" || ingredientsArray[i] == "cheese" || ingredientsArray[i] == "buns" || ingredientsArray[i] == "onions" && burgers == 0) {
-					recipeResults.push("Burgers\n10 min.\n25 min.\nAn All-American classic!\nGround beef\nCheese\nBurger buns\nOnions");
-					burgers = 1;
-				}
+				slideRecipe();
 			}
-			slideRecipe();
 		}
 		
 		function startGrilling(event:MouseEvent):void {
