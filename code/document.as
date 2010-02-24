@@ -51,14 +51,22 @@
 		var guestCount:TextField = new TextField();
 		var manualLabel:TextField = new TextField();
 		var autoLabel:TextField = new TextField();
+<<<<<<< .mine
+		var tempDisplay:TextField = new TextField();
+=======
 		var recipeWords:TextField = new TextField();
 		var recipeLabels:TextField = new TextField();
+>>>>>>> .r20
 		var ingredientsArray:Array = new Array();
 		var startSlider;
 		var myFormat = new TextFormat();
 		var switchFormat = new TextFormat();
 		var guestFormat = new TextFormat();
+<<<<<<< .mine
+		var tempFormat = new TextFormat();
+=======
 		var recipeFormat = new TextFormat();
+>>>>>>> .r20
 		var guestCounter:int = 1;
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
@@ -87,6 +95,7 @@
 		
 		var flame = new mc_grillFlame();
 		var flameBorder = new mc_grillFlameBorder();
+		var barLine:Sprite = new Sprite();
 		
 		function showXML(e:Event):void {
 			xmlData = new XML(e.target.data);
@@ -145,10 +154,16 @@
 			guestFormat.font = "Myriad Pro";
 				guestFormat.color = "0x000000";
 				guestFormat.size = 60;
+<<<<<<< .mine
+			tempFormat.font = "Myriad Pro";
+				tempFormat.color = "0xFF0000";
+				tempFormat.size = 24;
+=======
 			recipeFormat.font = "Myriad Pro";
 				recipeFormat.color = "0x000000";
 				recipeFormat.bold = true;
 				recipeFormat.size = 18;
+>>>>>>> .r20
 			
 			autoLabel.type = TextFieldType.DYNAMIC;
 				autoLabel.text = "Auto";
@@ -196,7 +211,6 @@
 		
 		function sliderDrop(event:MouseEvent):void {
 			mc_mainScreen.mc_slideArea.mc_sliderButton.stopDrag();
-			//trace(mc_mainScreen.mc_slideArea.mc_sliderButton.y);
 			if(mc_mainScreen.mc_slideArea.mc_sliderButton.y <= 95) {
 				snapUp();
 			}
@@ -304,7 +318,7 @@
 				ingredientList.setTextFormat(switchFormat);
 			guestDisplay.x = 21.3;
 			guestDisplay.y = 395.8;
-			guestCount.x = 30;
+			guestCount.x = 44;
 			guestCount.y = 395.8;
 				//guestCount.type = TextFieldType.DYNAMIC;
 				guestCount.wordWrap = true;
@@ -337,6 +351,9 @@
 			}
 			else {
 				guestCounter--;
+				if( guestCounter <= 9 ) {
+					guestCount.x = 44;
+				}
 			}
 			
 			guestCount.text = String(guestCounter);
@@ -349,6 +366,9 @@
 			}
 			else {
 				guestCounter++;
+				if( guestCounter >= 10 ) {
+					guestCount.x = 30;
+				}
 			}
 				
 			guestCount.text = String(guestCounter);
@@ -389,7 +409,10 @@
 			*/
 			
 				ingredientList.setTextFormat(switchFormat);
+<<<<<<< .mine
+=======
 				//trace(ingredientsArray[ingredientsArray.length-1]);
+>>>>>>> .r20
 				ingredients.text = "";
 			}
 		}
@@ -457,9 +480,11 @@
 			flame.buttonMode = true;
 			
 			var dragMask:Sprite = new Sprite();
-			dragMask.graphics.beginFill(0xFF0000);
+			dragMask.graphics.beginFill(0xFFFFFF);
 			dragMask.graphics.drawRect(1000, 73, 52, 230);
+			
 			mc_mainScreen.addChild(dragMask);
+			
 			dragMask.alpha = 0;
 			dragMask.mouseEnabled = false;
 			
@@ -467,9 +492,26 @@
 			
 			flame.x = 1002;
 			flame.y = 75;
+			flame.width = 50;
 			flameBorder.x = 1000;
 			flameBorder.y = 105;
+			flameBorder.width = 51;
 			
+			
+			barLine.graphics.beginFill(0xFFFFFF);
+			barLine.graphics.drawRect(10, 50, 90, 1);
+			flame.addChild(barLine);
+			
+			flameBorder.addChild(tempDisplay);
+			
+			tempDisplay.type = TextFieldType.DYNAMIC;
+				tempDisplay.text = "500°";
+				tempDisplay.x = 3;
+				tempDisplay.y = -30;
+				tempDisplay.width = 60;
+				tempDisplay.height = 30;
+				tempDisplay.setTextFormat(tempFormat);
+				
 			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
 			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
 			
@@ -488,19 +530,19 @@
 					trace("second event");
 				}
 				else if(timelineScroller.x == 352.5) {
-					trace("second event");
+					trace("third event");
 				}
 				else if(timelineScroller.x == 478.5) {
-					trace("second event");
+					trace("fourth event");
 				}
 				else if(timelineScroller.x == 604.5) {
-					trace("second event");
+					trace("fifth event");
 				}
 				else if(timelineScroller.x == 730.5) {
-					trace("second event");
+					trace("sixth event");
 				}
 				else if(timelineScroller.x == 856.5) {
-					trace("second event");
+					trace("seventh event");
 				}
 			}
 		}
@@ -513,13 +555,13 @@
 		var flameBind:Rectangle = new Rectangle(1002, 75, 0, 165);  
 		
 		function flameDrag(event:MouseEvent):void {
-			trace("Started dragging this bitch");
 			flame.startDrag(false, flameBind);
 		}
 		
 		function flameDrop(event:MouseEvent):void {
-			trace("Dropped this bitch");
 			flame.stopDrag();
+			tempDisplay.text = Math.abs(148-flame.y)*3 + "°";
+			tempDisplay.setTextFormat(tempFormat);
 		}
 		
 		function slideRecipe() {
