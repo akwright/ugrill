@@ -29,7 +29,7 @@
 		var modal = new mc_modal();
 		
 		// Create a new Timer object with a delay of 500 ms
-		var myTimer:Timer = new Timer(50);
+		var myTimer:Timer = new Timer(100);
 
 		// Recipe page variables
 		var searchArea = new mc_searchArea();
@@ -75,7 +75,7 @@
 		var alertBox = new mc_alertBox();
 		var closeAlert = new btn_closeMe();
 		var chicken = new mc_chicken();
-		var burgers = new mc_burgers();
+		var burgerPic = new mc_burgers();
 		
 		// Tween declarations to avoid Garbage collecting
 		var recipeScreenStart:Tween;
@@ -101,13 +101,13 @@
 		
 		function showXML(e:Event):void {
 			xmlData = new XML(e.target.data);
-			//trace(xmlData);
+			////trace(xmlData);
 			
 			for each (var element:XML in xmlData.*)
 			{
 				//tempSong.filename = element.@filename;
 				//pDocClass.addSong(tempSong);
-				//trace(element);
+				////trace(element);
 				//var playlistItem:PlaylistItem = new PlaylistItem(element.@filename);
 				//pDocClass.addChild(playlistItem);
 			}
@@ -118,19 +118,19 @@
 		/*
 			for (a = 0; a < 2; a++) // for each recipe...
 			{
-				trace(a);
+				//trace(a);
 				var recipeChildren:XMLList = recipeInput.recipe[a].ingredient.children(); 
 				
 				var counter:Number = 0;
 				for each(var recipeInfo:XML in recipeChildren) { // for each current recipe ingredient...
 					for(var i:Number = 0; i <= ingredientsArray.length; i++) { // for each ingredient typed in...
 						if(ingredientsArray[i] == recipeInfo[a]) { // if ingredients match...
-							trace(ingredientsArray[i]);
-							trace(recipeInfo[a]);
+							//trace(ingredientsArray[i]);
+							//trace(recipeInfo[a]);
 							recipeResults.push(a); // push recipe #
-							trace("adding: " +a);
-							trace(recipeInput.recipe[a].title.text());
-							trace(recipeInput.recipe[a].prep.text());
+							//trace("adding: " +a);
+							//trace(recipeInput.recipe[a].title.text());
+							//trace(recipeInput.recipe[a].prep.text());
 						}
 					}
 					counter++;
@@ -141,13 +141,14 @@
 		}
 		
 		public function document() {
+			
+			
 			mc_mainScreen.addChild(flameBorder);
 			mc_mainScreen.addChild(flame);
 			flameBorder.mouseEnabled = false;
 			flameBorder.mouseChildren = false;
 			flame.buttonMode = true;
 			
-<<<<<<< .mine
 			var dragMask:Sprite = new Sprite();
 			dragMask.graphics.beginFill(0xFFFFFF);
 			dragMask.graphics.drawRect(1000, 73, 52, 230);
@@ -182,52 +183,8 @@
 				tempDisplay.setTextFormat(tempFormat);
 				
 			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
-			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
-			
-=======
-			mc_mainScreen.addChild(flameBorder);
-			mc_mainScreen.addChild(flame);
-			flameBorder.mouseEnabled = false;
-			flameBorder.mouseChildren = false;
-			flame.buttonMode = true;
-			
-			var dragMask:Sprite = new Sprite();
-			dragMask.graphics.beginFill(0xFFFFFF);
-			dragMask.graphics.drawRect(1000, 73, 52, 230);
-			
-			mc_mainScreen.addChild(dragMask);
-			
-			dragMask.alpha = 0;
-			dragMask.mouseEnabled = false;
-			
-			flame.mask = dragMask;
-			
-			flame.x = 1002;
-			flame.y = 75;
-			flame.width = 50;
-			flameBorder.x = 1000;
-			flameBorder.y = 105;
-			flameBorder.width = 51;
-			
-			
-			barLine.graphics.beginFill(0xFFFFFF);
-			barLine.graphics.drawRect(10, 50, 90, 1);
-			flame.addChild(barLine);
-			
-			flameBorder.addChild(tempDisplay);
-			
-			tempDisplay.type = TextFieldType.DYNAMIC;
-				tempDisplay.text = "500°";
-				tempDisplay.x = 3;
-				tempDisplay.y = -30;
-				tempDisplay.width = 60;
-				tempDisplay.height = 30;
-				tempDisplay.setTextFormat(tempFormat);
-				
-			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
 			mc_mainScreen.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
 			
->>>>>>> .r26
 			currentState = 1; // auto
 			myTimer.addEventListener("timer", timelineTimer);
 			
@@ -340,9 +297,13 @@
 				musicPage.x = 50000;
 			}
 			
-			for(var i:Number = 0; i <= ingredientsArray.length; i++) {
+			while( ingredientsArray.length > 0 ) {
 				ingredientsArray.pop();
 			}
+			while( recipeResults.length > 0 ) {
+				recipeResults.pop();
+			}
+			recipeIndex = 0;
 			showModal();
 			
 			mc_mainScreen.addChild(recipePage);
@@ -475,11 +436,8 @@
 				}
 			}
 			// If musicPage exists, move it off screen.
-			if( musicPage.parent == mc_mainScreen ) {
-				trace('closed the music page');
 				musicPage.x = 50000;
 				modal.x = 50000;
-			}
 			
 		}
 
@@ -494,12 +452,12 @@
 				ingredientDisplay.addChild(buttons[i]);
 				buttons[buttons.length].y = 24*(i+1);
 				buttons[buttons.length].x = 40;
-				trace("added at " +buttons[i].y +" " +buttons[i].x);
+				//trace("added at " +buttons[i].y +" " +buttons[i].x);
 				i++;
 			*/
 			
 				ingredientList.setTextFormat(switchFormat);
-				//trace(ingredientsArray[ingredientsArray.length-1]);
+				////trace(ingredientsArray[ingredientsArray.length-1]);
 				ingredients.text = "";
 			}
 		}
@@ -539,9 +497,10 @@
 				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
 				//ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
+			
 			fajitas = 0;
 			burgers = 0;
-			
+		
 			if(ingredientsArray.length > 0)
 			{
 				for(var i:Number = 0; i <= ingredientsArray.length; i++) {
@@ -562,6 +521,12 @@
 		
 		function startGrilling(event:MouseEvent):void {
 			recipeGrill.removeEventListener(MouseEvent.MOUSE_UP, startGrilling);
+			burgerPic.x  = 50000;
+			chicken.x = 50000;
+			
+			timelineScroller.x =  21.5;
+			myTimer.reset();
+			myTimer.start();
 			
 			if( burgers == 1 && fajitas == 1 ) {
 				if( recipeIndex == 0 ) {
@@ -570,15 +535,15 @@
 					chicken.y = 100.8;
 				}
 				else if( recipeIndex == 1 ) {
-					mc_mainScreen.addChild(burgers);
-					burgers.x = 620.4;
-					burgers.y = 30.7;
+					mc_mainScreen.addChild(burgerPic);
+					burgerPic.x = 620.4;
+					burgerPic.y = 30.7;
 				}
 			}
 			else if( burgers == 1 && fajitas == 0 ) {
-				mc_mainScreen.addChild(burgers);
-				burgers.x = 620.4;
-				burgers.y = 30.7;
+				mc_mainScreen.addChild(burgerPic);
+				burgerPic.x = 620.4;
+				burgerPic.y = 30.7;
 			}
 			else if( burgers == 0 && fajitas == 1 ) {
 				mc_mainScreen.addChild(chicken);
@@ -612,7 +577,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 					
 					/*alertBack.graphics.beginFill(0xFFFFFF);
 					alertBack.graphics.drawRect(500, 200, 500, 100);
@@ -642,7 +607,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 				}
 				else if(timelineScroller.x == 352.5) {
 					showModal();
@@ -663,7 +628,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 				}
 				else if(timelineScroller.x == 478.5) {
 					showModal();
@@ -684,7 +649,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 				}
 				else if(timelineScroller.x == 604.5) {
 					showModal();
@@ -705,7 +670,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 				}
 				else if(timelineScroller.x == 730.5) {
 					showModal();
@@ -726,7 +691,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 				}
 				else if(timelineScroller.x == 856.5) {
 					showModal();
@@ -747,7 +712,7 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 				}
 				else if(timelineScroller.x == 1020.5) {
 					showModal();
@@ -768,13 +733,20 @@
 					closeAlert.x = 100;
 					closeAlert.y = 150;
 					
-					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeAlertFunction);
 					
 					myTimer.stop();
 					timelineScroller.x = 21.5;
 					chicken.x = 50000;
-					burgers.x = 50000;
+					burgerPic.x = 50000;
 				}
+			}
+		}
+		
+		function closeAlertFunction(event:MouseEvent):void {
+			alertBox.x = 50000;
+			if( recipePage.x > 10000 ) {
+				modal.x = 50000;
 			}
 		}
 		
@@ -786,15 +758,9 @@
 		var flameBind:Rectangle = new Rectangle(1002, 75, 0, 165);  
 		
 		function flameDrag(event:MouseEvent):void {
-<<<<<<< .mine
 			if( currentState != 1 ) {
 				flame.startDrag(false, flameBind);
 			}
-=======
-			if(currentState != 1) {
-				flame.startDrag(false, flameBind);
-			}
->>>>>>> .r26
 		}
 		
 		function flameDrop(event:MouseEvent):void {
@@ -830,7 +796,7 @@
 				recipeDisplayStart = new Tween(recipeDisplay, "alpha", Strong.easeIn, 0,1,1, true);
 			}
 			else {
-				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
+				//ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
 			
 			recipeWords.text = recipeResults[recipeIndex];
