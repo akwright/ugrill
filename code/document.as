@@ -42,12 +42,15 @@
 		var ingredients:TextField = new TextField();
 		var ingredientLabel:TextField = new TextField();
 		var ingredientTitle:TextField = new TextField();
+		var guestCount:TextField = new TextField();
 		var manualLabel:TextField = new TextField();
 		var autoLabel:TextField = new TextField();
 		var ingredientsArray:Array = new Array();
 		var startSlider;
 		var myFormat = new TextFormat();
 		var switchFormat = new TextFormat();
+		var guestFormat = new TextFormat();
+		var guestCounter:int = 1;
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
 		var currentState:int = new int(); // 1 = auto, 0 = manual
@@ -71,11 +74,14 @@
 			myTimer.addEventListener("timer", timelineTimer);
 			
 			myFormat.font = "Myriad Pro";
-			myFormat.color = "0xFFFFFF";
-			myFormat.size = 22;
+				myFormat.color = "0xFFFFFF";
+				myFormat.size = 22;
 			switchFormat.font = "Myriad Pro";
-			switchFormat.color = "0x000000";
-			switchFormat.size = 18;
+				switchFormat.color = "0x000000";
+				switchFormat.size = 18;
+			guestFormat.font = "Myriad Pro";
+				guestFormat.color = "0x000000";
+				guestFormat.size = 60;
 			
 			autoLabel.type = TextFieldType.DYNAMIC;
 				autoLabel.text = "Auto";
@@ -181,6 +187,7 @@
 				ingredientOutline.addChild(ingredientTitle);
 			
 			recipePage.addChild(closeMe);
+			ingredientOutline.addChild(guestCount);
 			
 			recipePage.x = 59.6;
 			recipePage.y = 59.0;
@@ -225,12 +232,23 @@
 				ingredientList.x = 10;
 				ingredientList.y = 15;
 				ingredientList.text="";
+				ingredientList.setTextFormat(switchFormat);
 			guestDisplay.x = 21.3;
 			guestDisplay.y = 395.8;
+			guestCount.x = 30;
+			guestCount.y = 395.8;
+				//guestCount.type = TextFieldType.DYNAMIC;
+				guestCount.wordWrap = true;
+				guestCount.width =  100;
+				guestCount.height = 220;
+				guestCount.text = "1";
+				guestCount.setTextFormat(guestFormat);
 			guestIncrease.x = 140.0;
 			guestIncrease.y = 392.4;
 			guestDecrease.x = 140.0;
 			guestDecrease.y = 442.6;
+			guestIncrease.addEventListener(MouseEvent.MOUSE_DOWN, guestUp);
+			guestDecrease.addEventListener(MouseEvent.MOUSE_DOWN, guestDown);
 			ingredientSearch.x = 21.3;
 			ingredientSearch.y = 563.1;
 			
@@ -244,6 +262,30 @@
 			closeMe.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
 		}
 		
+		function guestDown(event:MouseEvent):void {
+			if(guestCounter <= 1) {
+				guestCounter = 1;
+			}
+			else {
+				guestCounter--;
+			}
+			
+			guestCount.text = String(guestCounter);
+			guestCount.setTextFormat(guestFormat);
+		}
+		
+		function guestUp(event:MouseEvent):void {
+			if(guestCounter >= 15) {
+				guestCounter = 15;
+			}
+			else {
+				guestCounter++;
+			}
+				
+			guestCount.text = String(guestCounter);
+			guestCount.setTextFormat(guestFormat);
+		}
+		
 		function closeOverlays(event:MouseEvent):void {
 			// If recipePage exists, move it off screen.
 			if( recipePage.parent == mc_mainScreen ) {
@@ -253,7 +295,6 @@
 				if( recipeDisplay.parent == recipePage ) {
 					recipeDisplay.x = 50000;
 				}
-				
 			}
 			// If musicPage exists, move it off screen.
 			else if( musicPage.parent == mc_mainScreen ) {
@@ -265,10 +306,13 @@
 		
 		// Add ingredient from search field to list
 		function addIngredient(event:MouseEvent):void {
-			ingredientList.appendText("- " +ingredients.text +"\n");
-			ingredientsArray.push(ingredients.text);
-			trace(ingredientsArray[ingredientsArray.length-1]);
-			ingredients.text = "";
+			if(String(ingredients.text).length >= 1) {
+				ingredientList.appendText("- " +ingredients.text +"\n");
+				ingredientsArray.push(ingredients.text);
+				ingredientList.setTextFormat(switchFormat);
+				trace(ingredientsArray[ingredientsArray.length-1]);
+				ingredients.text = "";
+			}
 		}
 		
 		function showModal() {
@@ -305,7 +349,6 @@
 				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
 			slideRecipe();
-			
 		}
 		
 		function startGrilling(event:MouseEvent):void {
@@ -405,7 +448,6 @@
 		}
 		
 		function textFocusOut(event:FocusEvent):void {
-			//event.target.text = "Type ingredients here.";
 		}
 		
 		function musicButton(event:MouseEvent):void {
