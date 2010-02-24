@@ -1,5 +1,8 @@
 ﻿package {
 	
+	import flash.xml.*;
+	import flash.net.URLRequest;
+	import flash.net.URLLoader;
 	import flash.display.*;
 	import flash.text.*;
 	import flash.events.*;
@@ -15,6 +18,9 @@
 		 *  Main Variables
 		 */
 		 
+		var xmlLoader:URLLoader = new URLLoader();
+		var xmlData:XML = new XML();
+
 		// Global Variables
 		var recipePage = new mc_recipePage();
 		var ingredientOutline:MovieClip = new MovieClip();
@@ -45,15 +51,24 @@
 		var guestCount:TextField = new TextField();
 		var manualLabel:TextField = new TextField();
 		var autoLabel:TextField = new TextField();
+		var recipeWords:TextField = new TextField();
+		var recipeLabels:TextField = new TextField();
 		var ingredientsArray:Array = new Array();
 		var startSlider;
 		var myFormat = new TextFormat();
 		var switchFormat = new TextFormat();
 		var guestFormat = new TextFormat();
+		var recipeFormat = new TextFormat();
 		var guestCounter:int = 1;
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
 		var currentState:int = new int(); // 1 = auto, 0 = manual
+		var numberOfButtons:int = 1;
+		var buttons:Array = new Array();
+		var deleteIcon = new btn_deleteIcon();
+		var i:int = 0;
+		var recipeArray:Array = new Array();
+		var recipeIndex:Number = 0;
 		
 		// Tween declarations to avoid Garbage collecting
 		var recipeScreenStart:Tween;
@@ -65,11 +80,59 @@
 		var timelineUp:Tween;
 		var timelineDown2:Tween;
 		var timelineUp2:Tween;
+		var recipeResults:Array = new Array();
+		var a:Number = 0;
+		var fajitas:Number = 0;
+		var burgers:Number = 0;
 		
 		var flame = new mc_grillFlame();
 		var flameBorder = new mc_grillFlameBorder();
 		
+		function showXML(e:Event):void {
+			xmlData = new XML(e.target.data);
+			//trace(xmlData);
+			
+			for each (var element:XML in xmlData.*)
+			{
+				//tempSong.filename = element.@filename;
+				//pDocClass.addSong(tempSong);
+				//trace(element);
+				//var playlistItem:PlaylistItem = new PlaylistItem(element.@filename);
+				//pDocClass.addChild(playlistItem);
+			}
+		}
+		
+		function parseRecipes(recipeInput:XML):void {
+		
+		/*
+			for (a = 0; a < 2; a++) // for each recipe...
+			{
+				trace(a);
+				var recipeChildren:XMLList = recipeInput.recipe[a].ingredient.children(); 
+				
+				var counter:Number = 0;
+				for each(var recipeInfo:XML in recipeChildren) { // for each current recipe ingredient...
+					for(var i:Number = 0; i <= ingredientsArray.length; i++) { // for each ingredient typed in...
+						if(ingredientsArray[i] == recipeInfo[a]) { // if ingredients match...
+							trace(ingredientsArray[i]);
+							trace(recipeInfo[a]);
+							recipeResults.push(a); // push recipe #
+							trace("adding: " +a);
+							trace(recipeInput.recipe[a].title.text());
+							trace(recipeInput.recipe[a].prep.text());
+						}
+					}
+					counter++;
+				}
+			}
+		*/
+		
+		}
+		
 		public function document() {
+			xmlLoader.addEventListener(Event.COMPLETE, showXML);
+			xmlLoader.load(new URLRequest("../code/recipes.xml"));
+			
 			currentState = 1; // auto
 			myTimer.addEventListener("timer", timelineTimer);
 			
@@ -82,6 +145,10 @@
 			guestFormat.font = "Myriad Pro";
 				guestFormat.color = "0x000000";
 				guestFormat.size = 60;
+			recipeFormat.font = "Myriad Pro";
+				recipeFormat.color = "0x000000";
+				recipeFormat.bold = true;
+				recipeFormat.size = 18;
 			
 			autoLabel.type = TextFieldType.DYNAMIC;
 				autoLabel.text = "Auto";
@@ -95,6 +162,8 @@
 				manualLabel.y = 160;
 				manualLabel.width = 400;
 				manualLabel.setTextFormat(switchFormat);
+			
+			recipeArray
 			
 			mc_mainScreen.addChild(manualLabel);
 			mc_mainScreen.addChild(autoLabel);
@@ -303,14 +372,24 @@
 				modal.x = 50000;
 			}
 		}
-		
+
 		// Add ingredient from search field to list
 		function addIngredient(event:MouseEvent):void {
 			if(String(ingredients.text).length >= 1) {
 				ingredientList.appendText("- " +ingredients.text +"\n");
 				ingredientsArray.push(ingredients.text);
+			
+			/*
+				buttons[i] = UtilFunctions.clone(deleteIcon) as btn_deleteIcon;
+				ingredientDisplay.addChild(buttons[i]);
+				buttons[buttons.length].y = 24*(i+1);
+				buttons[buttons.length].x = 40;
+				trace("added at " +buttons[i].y +" " +buttons[i].x);
+				i++;
+			*/
+			
 				ingredientList.setTextFormat(switchFormat);
-				trace(ingredientsArray[ingredientsArray.length-1]);
+				//trace(ingredientsArray[ingredientsArray.length-1]);
 				ingredients.text = "";
 			}
 		}
@@ -339,6 +418,8 @@
 		function showRecipes(event:MouseEvent):void {
 			if( !recipeDisplay.exists ) {
 				recipePage.addChild(recipeDisplay);
+						recipeDisplay.addChild(recipeWords);
+						recipeDisplay.addChild(recipeLabels);
 						recipeDisplay.addChild(recipeGrill);
 						recipeDisplay.addChild(recipeBack);
 						recipeDisplay.addChild(recipeNext);
@@ -347,6 +428,22 @@
 				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, startGrilling);
 				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
 				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
+			}
+			fajitas = 0;
+			burgers = 0;
+			
+			for(var i:Number = 0; i <= ingredientsArray.length; i++) {
+				
+				if(ingredientsArray[i] == "cheese" || ingredientsArray[i] == "chicken" || ingredientsArray[i] == "salsa" || ingredientsArray[i] == "tortillas" && fajitas == 0) {
+					//                    title   prep    cook      desc                        pic          ing     ing    ing   ing
+					recipeResults.push("Fajitas\n10 min.\n20 min.\nA Mexican dish that is awesome\nChicken\nCheese\nSalsa\nTortillas");
+					fajitas = 1;
+				}
+				
+				if(ingredientsArray[i] == "beef" || ingredientsArray[i] == "cheese" || ingredientsArray[i] == "buns" || ingredientsArray[i] == "onions" && burgers == 0) {
+					recipeResults.push("Burgers\n10 min.\n25 min.\nAn All-American classic!\nGround beef\nCheese\nBurger buns\nOnions");
+					burgers = 1;
+				}
 			}
 			slideRecipe();
 		}
@@ -434,12 +531,43 @@
 				recipeGrill.y = 446.9;
 				recipeBack.x = 152.0;
 				recipeBack.y = 539.6;
+				recipeBack.addEventListener(MouseEvent.MOUSE_DOWN, recipeSeekBack);
 				recipeNext.x = 453.7;
 				recipeNext.y = 539.6;
+				recipeNext.addEventListener(MouseEvent.MOUSE_DOWN, recipeSeekNext);
+				recipeWords.x = 220;
+				recipeWords.y = 50;
+				recipeWords.height = 500;
+				recipeWords.width = 600;
+				recipeLabels.x = 100;
+				recipeLabels.y = 50;
+				recipeLabels.height = 500;
+				recipeLabels.width = 100;
+				recipeLabels.text = "Recipe:\nPrep Time:\nCook Time:\nDescription:\nIngredients:";
+				recipeLabels.setTextFormat(recipeFormat);
 				recipeDisplayStart = new Tween(recipeDisplay, "alpha", Strong.easeIn, 0,1,1, true);
 			}
 			else {
 				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
+			}
+			
+			recipeWords.text = recipeResults[recipeIndex];
+			recipeWords.setTextFormat(switchFormat);
+		}
+		
+		function recipeSeekBack(event:MouseEvent):void {
+			if(recipeIndex-1 >= 0) {
+				recipeIndex--;
+				recipeWords.text = recipeResults[recipeIndex];
+				recipeWords.setTextFormat(switchFormat);
+			}
+		}
+		
+		function recipeSeekNext(event:MouseEvent):void {
+			if(recipeIndex+1 <= recipeResults.length-1) {
+				recipeIndex++;
+				recipeWords.text = recipeResults[recipeIndex];
+				recipeWords.setTextFormat(switchFormat);
 			}
 		}
 		
@@ -470,7 +598,5 @@
 			closeMe.y = -4;
 			closeMe.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
 		}
-		
-	}	
-	
+	}
 }
