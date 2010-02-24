@@ -96,6 +96,7 @@
 		var flame = new mc_grillFlame();
 		var flameBorder = new mc_grillFlameBorder();
 		var barLine:Sprite = new Sprite();
+		var alertBack:Sprite = new Sprite();
 		
 		function showXML(e:Event):void {
 			xmlData = new XML(e.target.data);
@@ -139,6 +140,48 @@
 		}
 		
 		public function document() {
+			
+			mc_mainScreen.addChild(flameBorder);
+			mc_mainScreen.addChild(flame);
+			flameBorder.mouseEnabled = false;
+			flameBorder.mouseChildren = false;
+			flame.buttonMode = true;
+			
+			var dragMask:Sprite = new Sprite();
+			dragMask.graphics.beginFill(0xFFFFFF);
+			dragMask.graphics.drawRect(1000, 73, 52, 230);
+			
+			mc_mainScreen.addChild(dragMask);
+			
+			dragMask.alpha = 0;
+			dragMask.mouseEnabled = false;
+			
+			flame.mask = dragMask;
+			
+			flame.x = 1002;
+			flame.y = 75;
+			flame.width = 50;
+			flameBorder.x = 1000;
+			flameBorder.y = 105;
+			flameBorder.width = 51;
+			
+			
+			barLine.graphics.beginFill(0xFFFFFF);
+			barLine.graphics.drawRect(10, 50, 90, 1);
+			flame.addChild(barLine);
+			
+			flameBorder.addChild(tempDisplay);
+			
+			tempDisplay.type = TextFieldType.DYNAMIC;
+				tempDisplay.text = "500°";
+				tempDisplay.x = 3;
+				tempDisplay.y = -30;
+				tempDisplay.width = 60;
+				tempDisplay.height = 30;
+				tempDisplay.setTextFormat(tempFormat);
+				
+			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
+			mc_mainScreen.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
 			
 			currentState = 1; // auto
 			myTimer.addEventListener("timer", timelineTimer);
@@ -252,6 +295,9 @@
 				musicPage.x = 50000;
 			}
 			
+			for(var i:Number = 0; i <= ingredientsArray.length; i++) {
+				ingredientsArray.pop();
+			}
 			showModal();
 			
 			mc_mainScreen.addChild(recipePage);
@@ -446,7 +492,7 @@
 				
 				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, startGrilling);
 				recipeGrill.addEventListener(MouseEvent.MOUSE_UP, closeOverlays);
-				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
+				//ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 			}
 			fajitas = 0;
 			burgers = 0;
@@ -471,47 +517,6 @@
 		
 		function startGrilling(event:MouseEvent):void {
 			recipeGrill.removeEventListener(MouseEvent.MOUSE_UP, startGrilling);
-			mc_mainScreen.addChild(flameBorder);
-			mc_mainScreen.addChild(flame);
-			flameBorder.mouseEnabled = false;
-			flameBorder.mouseChildren = false;
-			flame.buttonMode = true;
-			
-			var dragMask:Sprite = new Sprite();
-			dragMask.graphics.beginFill(0xFFFFFF);
-			dragMask.graphics.drawRect(1000, 73, 52, 230);
-			
-			mc_mainScreen.addChild(dragMask);
-			
-			dragMask.alpha = 0;
-			dragMask.mouseEnabled = false;
-			
-			flame.mask = dragMask;
-			
-			flame.x = 1002;
-			flame.y = 75;
-			flame.width = 50;
-			flameBorder.x = 1000;
-			flameBorder.y = 105;
-			flameBorder.width = 51;
-			
-			
-			barLine.graphics.beginFill(0xFFFFFF);
-			barLine.graphics.drawRect(10, 50, 90, 1);
-			flame.addChild(barLine);
-			
-			flameBorder.addChild(tempDisplay);
-			
-			tempDisplay.type = TextFieldType.DYNAMIC;
-				tempDisplay.text = "500°";
-				tempDisplay.x = 3;
-				tempDisplay.y = -30;
-				tempDisplay.width = 60;
-				tempDisplay.height = 30;
-				tempDisplay.setTextFormat(tempFormat);
-				
-			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
-			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
 			
 			if( burgers == 1 && fajitas == 1 ) {
 				if( recipeIndex == 0 ) {
@@ -553,6 +558,14 @@
 					
 					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
 					
+					/*alertBack.graphics.beginFill(0xFFFFFF);
+					alertBack.graphics.drawRect(500, 200, 500, 100);
+					alertBox.text = "Flip the food now.";
+					alertBox.x = 400;
+					alertBox.y = 600;
+					alertBox.width = 500;
+					alertBack.addChild(alertBox);
+					mc_mainScreen.addChild(alertBack);*/
 				}
 				else if(timelineScroller.x == 226.5) {
 					showModal();
@@ -716,13 +729,16 @@
 		var flameBind:Rectangle = new Rectangle(1002, 75, 0, 165);  
 		
 		function flameDrag(event:MouseEvent):void {
-			flame.startDrag(false, flameBind);
+			if(currentState != 1) {
+				flame.startDrag(false, flameBind);
+			}
 		}
 		
 		function flameDrop(event:MouseEvent):void {
 			flame.stopDrag();
-			tempDisplay.text = Math.abs(148-flame.y)*3 + "°";
+			tempDisplay.text = Math.abs(238-flame.y)*3 + "°";
 			tempDisplay.setTextFormat(tempFormat);
+			mc_mainScreen.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
 		}
 		
 		function slideRecipe() {
