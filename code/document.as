@@ -320,10 +320,9 @@
 			guestDisplay.y = 395.8;
 			guestCount.x = 44;
 			guestCount.y = 395.8;
-				//guestCount.type = TextFieldType.DYNAMIC;
 				guestCount.wordWrap = true;
-				guestCount.width =  100;
-				guestCount.height = 220;
+				guestCount.width =  50;
+				guestCount.height = 80;
 				guestCount.text = "1";
 				guestCount.setTextFormat(guestFormat);
 			guestIncrease.x = 140.0;
