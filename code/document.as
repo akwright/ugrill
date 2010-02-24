@@ -51,6 +51,8 @@
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
 		var currentState:int = new int(); // 1 = auto, 0 = manual
+		
+		// Tween declarations to avoid Garbage collecting
 		var recipeScreenStart:Tween;
 		var sliderSnapDown:Tween;
 		var sliderSnapUp:Tween;
@@ -308,11 +310,23 @@
 		
 		function startGrilling(event:MouseEvent):void {
 			recipeGrill.removeEventListener(MouseEvent.MOUSE_UP, startGrilling);
-			mc_mainScreen.addChild(flame);
 			mc_mainScreen.addChild(flameBorder);
+			mc_mainScreen.addChild(flame);
+			flameBorder.mouseEnabled = false;
+			flameBorder.mouseChildren = false;
+			flame.buttonMode = true;
+			
+			var dragMask:Sprite = new Sprite();
+			dragMask.graphics.beginFill(0xFF0000);
+			dragMask.graphics.drawRect(1000, 73, 52, 230);
+			mc_mainScreen.addChild(dragMask);
+			dragMask.alpha = 0;
+			dragMask.mouseEnabled = false;
+			
+			flame.mask = dragMask;
 			
 			flame.x = 1002;
-			flame.y = 76;
+			flame.y = 75;
 			flameBorder.x = 1000;
 			flameBorder.y = 105;
 			
@@ -356,13 +370,15 @@
 			timeline.gotoAndStop(1);
 		}
 		
-		var flameBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
+		var flameBind:Rectangle = new Rectangle(1002, 75, 0, 165);  
 		
 		function flameDrag(event:MouseEvent):void {
+			trace("Started dragging this bitch");
 			flame.startDrag(false, flameBind);
 		}
 		
 		function flameDrop(event:MouseEvent):void {
+			trace("Dropped this bitch");
 			flame.stopDrag();
 		}
 		
