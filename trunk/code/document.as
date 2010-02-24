@@ -54,6 +54,7 @@
 		var tempDisplay:TextField = new TextField();
 		var recipeWords:TextField = new TextField();
 		var recipeLabels:TextField = new TextField();
+		var alertType:TextField = new TextField();
 		var ingredientsArray:Array = new Array();
 		var startSlider;
 		var myFormat = new TextFormat();
@@ -61,6 +62,7 @@
 		var guestFormat = new TextFormat();
 		var tempFormat = new TextFormat();
 		var recipeFormat = new TextFormat();
+		var alertFormat = new TextFormat();
 		var guestCounter:int = 1;
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
@@ -70,6 +72,9 @@
 		var i:int = 0;
 		var recipeArray:Array = new Array();
 		var recipeIndex:Number = 0;
+		var alertBox = new mc_alertBox();
+		var closeAlert = new btn_closeMe();
+		var chicken = new mc_chicken();
 		
 		// Tween declarations to avoid Garbage collecting
 		var recipeScreenStart:Tween;
@@ -81,6 +86,8 @@
 		var timelineUp:Tween;
 		var timelineDown2:Tween;
 		var timelineUp2:Tween;
+		var musicScreenStart:Tween;
+		
 		var recipeResults:Array = new Array();
 		var a:Number = 0;
 		var fajitas:Number = 0;
@@ -152,6 +159,10 @@
 				recipeFormat.color = "0x000000";
 				recipeFormat.bold = true;
 				recipeFormat.size = 18;
+			alertFormat.font = "Myriad Pro";
+				alertFormat.color = "0x196dad";
+				alertFormat.size = 36;
+				
 			autoLabel.type = TextFieldType.DYNAMIC;
 				autoLabel.text = "Auto";
 				autoLabel.x = 1330;
@@ -362,6 +373,7 @@
 		}
 		
 		function closeOverlays(event:MouseEvent):void {
+			alertBox.x = 50000;
 			// If recipePage exists, move it off screen.
 			if( recipePage.parent == mc_mainScreen ) {
 				recipePage.x = 50000;
@@ -372,11 +384,12 @@
 				}
 			}
 			// If musicPage exists, move it off screen.
-			else if( musicPage.parent == mc_mainScreen ) {
+			if( musicPage.parent == mc_mainScreen ) {
 				trace('closed the music page');
 				musicPage.x = 50000;
 				modal.x = 50000;
 			}
+			
 		}
 
 		// Add ingredient from search field to list
@@ -500,6 +513,17 @@
 			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
 			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
 			
+			if( burgers == 1 && fajitas == 1 ) {
+				if( recipeIndex == 0 ) {
+					mc_mainScreen.addChild(chicken);
+					chicken.x = 625.5;
+					chicken.y = 100.8;
+				}
+				else if( recipeIndex == 1 ) {
+					
+				}
+			}
+			
 			myTimer.start();
 			//var timelineTween:Tween = new Tween(timelineScroller, "x", null, timelineScroller.x,1000,400, true);
 		}
@@ -509,25 +533,177 @@
 			
 			if(currentState == 1) { // if Auto
 				if(timelineScroller.x == 100.5) {
-					trace("first event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Flip the Food!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 400;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					
 				}
 				else if(timelineScroller.x == 226.5) {
-					trace("second event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Attend to the Side-dish!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 500;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
 				}
 				else if(timelineScroller.x == 352.5) {
-					trace("third event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Flip the Food!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 400;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
 				}
 				else if(timelineScroller.x == 478.5) {
-					trace("fourth event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Rotate the Food!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 450;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
 				}
 				else if(timelineScroller.x == 604.5) {
-					trace("fifth event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Add a Spray of Water!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 500;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
 				}
 				else if(timelineScroller.x == 730.5) {
-					trace("sixth event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Flip the Side-dish!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 450;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
 				}
 				else if(timelineScroller.x == 856.5) {
-					trace("seventh event");
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Please Rotate the Food!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 400;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+				}
+				else if(timelineScroller.x == 1020.5) {
+					showModal();
+					mc_mainScreen.addChild(alertBox);
+					alertBox.x = 400;
+					alertBox.y = 200;
+					alertBox.addChild(alertType);
+					
+					alertType.type = TextFieldType.DYNAMIC;
+					alertType.text = "Grilling Session Complete!";
+					alertType.y = 80;
+					alertType.x = 100;
+					alertType.width = 400;
+					alertType.height = 50;
+					alertType.setTextFormat(alertFormat);
+					
+					alertBox.addChild(closeAlert);
+					closeAlert.x = 100;
+					closeAlert.y = 150;
+					
+					closeAlert.addEventListener(MouseEvent.MOUSE_DOWN, closeOverlays);
+					
+					myTimer.stop();
+					timelineScroller.x = 21.5;
+					chicken.x = 50000;
 				}
 			}
 		}
@@ -606,19 +782,30 @@
 		}
 		
 		function musicButton(event:MouseEvent):void {
-			if( recipePage.parent == mc_mainScreen ) {
+			if( recipePage.exists ) {
 				recipePage.x = 50000;
 			}
-			
-			else if( musicPage.exists  ) {
-				mc_mainScreen.addChild(musicPage);
-			}
 			showModal();
+			
+			mc_mainScreen.addChild(musicPage);
 			
 			musicPage.alpha = 0;
 			musicPage.x = 59.6;
 			musicPage.y = 59.0;
-			var musicScreenStart:Tween = new Tween(musicPage, "alpha", Strong.easeIn, 0,1,1, true);
+			musicScreenStart = new Tween(musicPage, "alpha", Strong.easeIn, 0,1,1, true);
+			
+			musicPage.addChild(alertBox);
+			alertBox.x = 280;
+			alertBox.y = 200;
+			alertBox.addChild(alertType);
+			
+			alertType.type = TextFieldType.DYNAMIC;
+			alertType.text = "The Music Page is Not Available.";
+			alertType.y = 80;
+			alertType.x = 90;
+			alertType.width = 600;
+			alertType.height = 50;
+			alertType.setTextFormat(alertFormat);
 			
 			musicPage.addChild(closeMe);
 			closeMe.x = 1178.4;
