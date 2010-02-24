@@ -21,6 +21,9 @@
 		
 		var musicPage = new mc_musicPage();
 		var modal = new mc_modal();
+		
+		// Create a new Timer object with a delay of 500 ms
+		var myTimer:Timer = new Timer(50);
 
 		// Recipe page variables
 		var searchArea = new mc_searchArea();
@@ -48,12 +51,23 @@
 		var timeline = new mc_timeline();
 		var timelineScroller = new mc_timelineScroller();
 		var currentState:int = new int(); // 1 = auto, 0 = manual
+		var recipeScreenStart:Tween;
+		var sliderSnapDown:Tween;
+		var sliderSnapUp:Tween;
+		var ingredientStuff:Tween;
+		var recipeDisplayStart:Tween;
+		var timelineDown:Tween;
+		var timelineUp:Tween;
+		var timelineDown2:Tween;
+		var timelineUp2:Tween;
 		
 		var flame = new mc_grillFlame();
 		var flameBorder = new mc_grillFlameBorder();
 		
 		public function document() {
 			currentState = 1; // auto
+			myTimer.addEventListener("timer", timelineTimer);
+			
 			myFormat.font = "Myriad Pro";
 			myFormat.color = "0xFFFFFF";
 			myFormat.size = 22;
@@ -124,24 +138,22 @@
 		
 		function snapDown() {
 			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(5);
-			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,167,0.1, true);
+			sliderSnapDown = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,167,0.1, true);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(2);
-			trace(mc_mainScreen.mc_slideArea.mc_sliderButton.y);
 			if(currentState == 1) {
-				var timelineDown:Tween = new Tween(timeline, "alpha", Strong.easeIn, 1,0,.3, true);
-				var timelineDown2:Tween = new Tween(timelineScroller, "alpha", Strong.easeIn, 1,0,.3, true);
+				timelineDown = new Tween(timeline, "alpha", Strong.easeIn, 1,0,.3, true);
+				timelineDown2 = new Tween(timelineScroller, "alpha", Strong.easeIn, 1,0,.3, true);
 			}
 			currentState = 0;
 		}
 		
 		function snapUp() {
 			//mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
-			var ingredientOutline:Tween = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,22,0.1, true);
+			sliderSnapUp = new Tween(mc_mainScreen.mc_slideArea.mc_sliderButton, "y", null, mc_mainScreen.mc_slideArea.mc_sliderButton.y,22,0.1, true);
 			mc_mainScreen.mc_slideArea.mc_sliderButton.gotoAndStop(1);
-			trace(mc_mainScreen.mc_slideArea.mc_sliderButton.y);
 			if(currentState == 0) {
-				var timelineUp:Tween = new Tween(timeline, "alpha", Strong.easeIn, 0,1,.3, true);
-				var timelineUp2:Tween = new Tween(timelineScroller, "alpha", Strong.easeIn, 0,1,.3, true);
+				timelineUp = new Tween(timeline, "alpha", Strong.easeIn, 0,1,.3, true);
+				timelineUp2 = new Tween(timelineScroller, "alpha", Strong.easeIn, 0,1,.3, true);
 			}
 			currentState = 1;
 		}
@@ -171,7 +183,7 @@
 			recipePage.x = 59.6;
 			recipePage.y = 59.0;
 												  
-			var recipeScreenStart:Tween = new Tween(recipePage, "alpha", Strong.easeIn, 0,1,1, true);
+			recipeScreenStart = new Tween(recipePage, "alpha", Strong.easeIn, 0,1,1, true);
 			ingredientOutline.x = 400;
 			ingredientOutline.y = 0;
 			searchArea.x = 20.9;
@@ -306,6 +318,42 @@
 			
 			flame.addEventListener(MouseEvent.MOUSE_DOWN, flameDrag);
 			flame.addEventListener(MouseEvent.MOUSE_UP, flameDrop);
+			
+			myTimer.start();
+			//var timelineTween:Tween = new Tween(timelineScroller, "x", null, timelineScroller.x,1000,400, true);
+		}
+		
+		function timelineTimer(event:TimerEvent):void {
+			timelineScroller.x++;
+			
+			if(currentState == 1) { // if Auto
+				if(timelineScroller.x == 100.5) {
+					trace("first event");
+				}
+				else if(timelineScroller.x == 226.5) {
+					trace("second event");
+				}
+				else if(timelineScroller.x == 352.5) {
+					trace("second event");
+				}
+				else if(timelineScroller.x == 478.5) {
+					trace("second event");
+				}
+				else if(timelineScroller.x == 604.5) {
+					trace("second event");
+				}
+				else if(timelineScroller.x == 730.5) {
+					trace("second event");
+				}
+				else if(timelineScroller.x == 856.5) {
+					trace("second event");
+				}
+			}
+		}
+		
+		function alert():void {
+			timeline.gotoAndStop(2);
+			timeline.gotoAndStop(1);
 		}
 		
 		var flameBind:Rectangle = new Rectangle(11.8, 22, 0, 145);  
@@ -320,7 +368,7 @@
 		
 		function slideRecipe() {
 			if(ingredientOutline.x == 400) {
-				var ingredientStuff:Tween = new Tween(ingredientOutline, "x", Strong.easeIn, 400,0,0.5, true);
+				ingredientStuff = new Tween(ingredientOutline, "x", Strong.easeIn, 400,0,0.5, true);
 				recipeDisplay.x = 542.0;
 				recipeDisplay.y = 28.7;
 				recipeGrill.x = 100.0;
@@ -329,7 +377,7 @@
 				recipeBack.y = 539.6;
 				recipeNext.x = 453.7;
 				recipeNext.y = 539.6;
-				var recipeDisplayStart:Tween = new Tween(recipeDisplay, "alpha", Strong.easeIn, 0,1,1, true);
+				recipeDisplayStart = new Tween(recipeDisplay, "alpha", Strong.easeIn, 0,1,1, true);
 			}
 			else {
 				ingredientSearch.removeEventListener(MouseEvent.MOUSE_UP, showRecipes);
